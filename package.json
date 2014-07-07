@@ -1,0 +1,18 @@
+{
+  "name": "linter-lua-globals",
+  "linter-package": true,
+  "main": "./lib/init",
+  "version": "0.0.0",
+  "description": "Lua Global finder",
+  "activationEvents": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sinaloit/linter-lua-globals"
+  },
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {
+  }
+}
