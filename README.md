@@ -7,7 +7,7 @@ This package will lint your `.lua` opened files in Atom using a script to find g
 
 The script provided was created originally by [Mikk](http://www.wowace.com/addons/findglobals/) and has been modified to work as a linter.
 
-![linter-lua-globals](https://github.com/sinaloit/linter-lua-globals/example.png)
+![linter-lua-globals](https://github.com/Sinaloit/linter-lua-globals/raw/master/example.PNG)
 
 ## Directives in the file:
 The following directives in the file turn certain features off in the detection
