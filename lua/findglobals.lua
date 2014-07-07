@@ -1,8 +1,8 @@
 
 --[[
 
-globals.lua (FindGlobals), a useful script to find global variable access in 
-.lua files, placed in the public domain by Mikk in 2009. 
+globals.lua (FindGlobals), a useful script to find global variable access in
+.lua files, placed in the public domain by Mikk in 2009.
 
 HOW TO INVOKE:
   luac -l MyFile.lua | lua globals.lua MyFile.lua
@@ -17,17 +17,17 @@ Directives in the file:
 -- SETGLOBALFILE [ON/OFF]
   Enable/disable SETGLOBAL checks in the global scope
   Default: ON
-  
+
 -- SETGLOBALFUNC [ON/OFF]
   Enable/disable SETGLOBAL checks in functions. This setting affects the whole file (for now)
   Default: ON
-  
+
 -- GETGLOBALFILE [ON/OFF]
   Default: OFF
 
 -- GETGLOBALFUNC [ON/OFF]
   Default: ON
-  
+
 --]]
 
 local strmatch=string.match
@@ -36,7 +36,7 @@ local print=print
 local gsub = string.gsub
 local tonumber=tonumber
 
-local source=assert(io.open(arg[1]))
+local source=assert(io.open(arg[2]))
 
 -- First we parse the source file
 
@@ -59,43 +59,43 @@ while true do
 	local func = strmatch(lin, "%f[%a_][%a0-9_.:]+%s*=%s*function%s*%([^)]*") or  -- blah=function(...)
 		strmatch(lin, "%f[%a_]function%s*%([^)]*") or -- function(...)
 		strmatch(lin, "%f[%a_]function%s+[%a0-9_.:]+%s*%([^)]*")  -- function blah(...)
-	
+
 	if func then
 		func=func..")"
 		funcNames[n]=func
 	end
-	
+
 	if strmatch(lin, "^%s*%-%-") then
 		local args = strmatch(lin, "^%s*%-%-%s*GLOBALS:%s*(.*)")
-		if args then 
+		if args then
 			for name in strgmatch(args, "[%a0-9_]+") do
 				GLOBALS[name]=true
 			end
 		end
 
 		local args = strmatch(lin, "^%s*%-%-%s*SETGLOBALFILE%s+(%u+)")
-		if args=="ON" then 
+		if args=="ON" then
 			SETGLOBALfile=true
 		elseif args=="OFF" then
 			SETGLOBALfile=false
 		end
 
 		local args = strmatch(lin, "^%s*%-%-%s*GETGLOBALFILE%s+(%u+)")
-		if args=="ON" then 
+		if args=="ON" then
 			GETGLOBALfile=true
 		elseif args=="OFF" then
 			GETGLOBALfile=false
 		end
-		
+
 		local args = strmatch(lin, "^%s*%-%-%s*SETGLOBALFUNC%s+(%u+)")
-		if args=="ON" then 
+		if args=="ON" then
 			SETGLOBALfunc=true
 		elseif args=="OFF" then
 			SETGLOBALfunc=false
 		end
 
 		local args = strmatch(lin, "^%s*%-%-%s*GETGLOBALFUNC%s+(%u+)")
-		if args=="ON" then 
+		if args=="ON" then
 			GETGLOBALfunc=true
 		elseif args=="OFF" then
 			GETGLOBALfunc=false
@@ -103,7 +103,7 @@ while true do
 	end
 end
 
--- Helper function that prints a line along with which function it is in. 
+-- Helper function that prints a line along with which function it is in.
 
 local curfunc
 local lastfuncprinted
@@ -113,7 +113,7 @@ local function printone(lin, subst)
 	if globalName and GLOBALS[globalName] then
 		return
 	end
-	
+
 	if curfunc~=lastfuncprinted then
 		local from,to = strmatch(curfunc, "function <[^:]*:(%d+),(%d+)")
 		from=tonumber(from)
@@ -134,7 +134,17 @@ end
 local nSource=0
 local funcScope = false
 
-local stdin=io.popen("luac -l -p " .. arg[1])
+local function buildPath(pathArg)
+	if pathArg == "undefined" then
+		return "luac"
+	end
+
+	return '"' .. pathArg .. '/luac"'
+end
+
+local cmdLine = buildPath(arg[1]) .. " -l -p " .. arg[2]
+local stdin=assert(io.popen(cmdLine))
+
 while true do
 	local lin = stdin:read()
 	if not lin then break end

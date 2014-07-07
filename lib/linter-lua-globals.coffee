@@ -10,8 +10,6 @@ class LinterLuaGlobals extends Linter
 
   defaultLevel: 'warning'
 
-  cmd: 'lua ' + atom.packages.resolvePackagePath('linter-lua-globals') + '/lua/findglobals.lua'
-
   # A regex pattern used to extract information from the executable's output.
   regex:
     '\\s*\\[(?<line>\\d+)\\]\\s+' +
@@ -24,13 +22,12 @@ class LinterLuaGlobals extends Linter
 
     atom.config.observe 'linter-lua-globals.luacExecutablePath', =>
       @executablePath = atom.config.get 'linter-lua-globals.luaExecutablePath'
-
-    #atom.config.observe 'linter-lua-globals.script', =>
-    #  @script = atom.config.get 'linter-lua-globals.script'
-    #  @cmd = 'lua @script'.replace('@script', @script)
+      @cmd = ('lua ' +
+        atom.packages.resolvePackagePath('linter-lua-globals') +
+        '/lua/findglobals.lua '+
+        '@executablePath').replace('@executablePath', @executablePath)
 
   destroy: ->
     atom.config.unobserve 'linter-lua-globals.luaExecutablePath'
-    atom.config.unobserve 'linter-lua-globals.script'
 
 module.exports = LinterLuaGlobals

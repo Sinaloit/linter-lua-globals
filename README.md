@@ -42,7 +42,6 @@ The following directives in the file turn certain features off in the detection
 
 ## Linter Installation
 Before using this package, you must ensure that `lua` and `luac` are installed on your system.
-*: Limitation of this version is that luac must be in the system path
 
 ## Installation
 
