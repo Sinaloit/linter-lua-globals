@@ -5,27 +5,40 @@ linter-lua-globals
 
 This package will lint your `.lua` opened files in Atom using a script to find globals.  **It will lint on edit and/or save**, so you'll see instantly if your code has globals you may not be expecting.
 
-The script provided was created originally by [Mikk](http://www.wowace.com/addons/findglobals/)
+The script provided was created originally by [Mikk](http://www.wowace.com/addons/findglobals/) and has been modified to work as a linter.
 
-##Directives in the file:
+![linter-lua-globals](https://github.com/sinaloit/linter-lua-globals/example.png)
+
+## Directives in the file:
 The following directives in the file turn certain features off in the detection
 
--- GLOBALS: SomeGlobal, SomeOtherGlobal
-  The script will never complain about these. There may be multiple lines of these anywhere in the file, taking effect globally (for now). There is no way to un-GLOBAL an already declared global.
+**-- GLOBALS:** SomeGlobal, SomeOtherGlobal
 
--- SETGLOBALFILE [ON/OFF]
-  Enable/disable SETGLOBAL checks in the global scope
-  Default: ON
-  
--- SETGLOBALFUNC [ON/OFF]
-  Enable/disable SETGLOBAL checks in functions. This setting affects the whole file (for now)
-  Default: ON
-  
--- GETGLOBALFILE [ON/OFF]
-  Default: OFF
+  * The script will never complain about these. There may be multiple lines of these anywhere in the file, taking effect globally (for now). There is no way to un-GLOBAL an already declared global.
 
--- GETGLOBALFUNC [ON/OFF]
-  Default: ON
+**-- SETGLOBALFILE** [ON/OFF]
+
+  * Enable/disable `SETGLOBAL` checks in the global scope
+    * Default: ON
+
+**-- SETGLOBALFUNC** [ON/OFF]
+
+  * Enable/disable `SETGLOBAL` checks in functions. This setting affects the whole file.
+    * Default: ON
+
+**-- GETGLOBALFILE** [ON/OFF]
+
+  * Enable/disable `GETGLOBAL` checks in functions. This setting affects the whole file.
+    * Default: OFF
+
+**-- GETGLOBALFUNC** [ON/OFF]
+
+  * Enable/disable `GETGLOBAL` checks in functions. This setting affects the whole file.
+    * Default: ON
+
+## Linting Behaviors
+* `GETGLOBAL` occurrences will be marked as warnings
+* `SETGLOBAL` occurrences will be marked as errors
 
 ## Linter Installation
 Before using this package, you must ensure that `lua` and `luac` are installed on your system.
