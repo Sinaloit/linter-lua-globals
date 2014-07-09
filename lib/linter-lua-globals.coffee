@@ -26,8 +26,8 @@ class LinterLuaGlobals extends Linter
       @executablePath = atom.config.get 'linter-lua-globals.luaExecutablePath'
       @cmd = [
         'lua',
-        atom.packages.resolvePackagePath('linter-lua-globals') +
-          '/lua/findglobals.lua',
+        path.join(atom.packages.resolvePackagePath('linter-lua-globals'),
+          'lua','findglobals.lua'),
         @executablePath
       ]
 
@@ -38,7 +38,7 @@ class LinterLuaGlobals extends Linter
     cmd_list.push filePath
 
     if @executablePath
-      cmd_list[0] = @executablePath + path.sep + cmd_list[0]
+      cmd_list[0] = path.join(@executablePath, cmd_list[0])
 
     # if there are "@filename" placeholders, replace them with real file path
     cmd_list = cmd_list.map (cmd_item) ->
