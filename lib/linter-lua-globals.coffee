@@ -1,5 +1,6 @@
 linterPath = atom.packages.getLoadedPackage("linter").path
 Linter = require "#{linterPath}/lib/linter"
+path = require 'path'
 
 class LinterLuaGlobals extends Linter
   # The syntax that the linter handles. May be a string or
@@ -13,14 +14,15 @@ class LinterLuaGlobals extends Linter
   # A regex pattern used to extract information from the executable's output.
   regex:
     '\\s*\\[(?<line>\\d+)\\]\\s+' +
-    '((?<warning>G:)|(?<error>S:))(?<message>.*)'
+    '((?<warning>G:)|(?<error>S:))' +
+    '(?<message>.+?(?::\\s(?<near>.*)|$))'
 
   errorStream: 'stdout'
 
   constructor: (editor) ->
     super(editor)
 
-    atom.config.observe 'linter-lua-globals.luacExecutablePath', =>
+    atom.config.observe 'linter-lua-globals.luaExecutablePath', =>
       @executablePath = atom.config.get 'linter-lua-globals.luaExecutablePath'
       @cmd = [
         'lua',
@@ -31,12 +33,12 @@ class LinterLuaGlobals extends Linter
 
   # Have to override because windows paths can contain spaces
   getCmdAndArgs: (filePath) ->
-    cmd_list = @cmd
-
+    #Duplicate cmd array so we don't change the original
+    cmd_list = @cmd.slice(0)
     cmd_list.push filePath
 
     if @executablePath
-      cmd_list[0] = "#{@executablePath}/#{cmd_list[0]}"
+      cmd_list[0] = @executablePath + path.sep + cmd_list[0]
 
     # if there are "@filename" placeholders, replace them with real file path
     cmd_list = cmd_list.map (cmd_item) ->
