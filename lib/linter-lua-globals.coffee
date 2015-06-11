@@ -22,7 +22,7 @@ class LinterLuaGlobals extends Linter
   constructor: (editor) ->
     super(editor)
 
-    atom.config.observe 'linter-lua-globals.luaExecutablePath', =>
+    @configSubscription = atom.config.observe 'linter-lua-globals.luaExecutablePath', =>
       @executablePath = atom.config.get 'linter-lua-globals.luaExecutablePath'
       @cmd = [
         'lua',
@@ -56,6 +56,7 @@ class LinterLuaGlobals extends Linter
     }
 
   destroy: ->
-    atom.config.unobserve 'linter-lua-globals.luaExecutablePath'
+    super
+    @configSubscription.dispose()
 
 module.exports = LinterLuaGlobals
